@@ -2904,6 +2904,7 @@ void ClearPlayerAlertEvents( void );
 void SiegeCheckTimers(void);
 void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd );
 extern void Jedi_Decloak( gentity_t *self );
+extern void Jedi_Decloak( gentity_t *self );
 qboolean G_PointInBounds( vec3_t point, vec3_t mins, vec3_t maxs );
 
 int g_siegeRespawnCheck = 0;
@@ -3280,6 +3281,21 @@ void G_RunFrame( int levelTime ) {
 					{ //turn it off
 						ent->client->ps.cloakFuel = 0;
 						Jedi_Decloak(ent);
+					}
+					ent->client->cloakDebReduce = level.time + CLOAK_DEFUEL_RATE;
+				}
+			}
+			else if (ent->client->ps.powerups[PW_CLOAKED_KS])
+			{ //using cloak, drain battery
+				if (ent->client->cloakDebReduce < level.time)
+				{
+					ent->client->ps.cloakFuel_KS--;
+
+					if (ent->client->ps.cloakFuel_KS <= 0)
+					{ //turn it off
+						ent->client->ps.cloakFuel_KS = 100;
+						Jedi_Decloak_KS(ent);
+						ent->client->ps.stats[STAT_HOLDABLE_ITEMS] &= ~(1 << HI_CLOAK_KS);
 					}
 					ent->client->cloakDebReduce = level.time + CLOAK_DEFUEL_RATE;
 				}

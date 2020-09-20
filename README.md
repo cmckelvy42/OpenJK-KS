@@ -1,3 +1,28 @@
+#OpenJK, but with killstreaks for fun (and learning)
+
+As an exercise in C/C++ with a large, existing codebase, I decided I wanted to mess with Jedi Academy, a game I spent the better part of a decade playing. I thought about contributing to OpenJK directly, but the after 7 years of work, the issues section looks pretty barren, so I ended up settling on the first fun idea I had, which was to use the equipment from Siege as killstreak rewards in other gametypes.
+
+##What works so far
+
+When the server has the new cvar, g_enablekillstreaks, set to 1, players will acquire killstreak rewards at 3, 5, and 7 kills, with the count resetting at 7 (so at 10 kills, you get the 3 reward again).
+
+At 3 kills, you get a Seeker droid that orbits around the player for 30 seconds, firing at nearby targets.
+At 5 kills, you get a deployable sentry turret.
+At 7 kills, you get a custom version of the cloak item from Siege, but instead of having recharging "fuel", it gets removed from your inventory after it runs out (but you can toggle it on and off while it still has fuel!).
+To use killstreaks, you need invnext/invprev mapped to buttons as well as "Use Held Item"
+Killstreaks do not currently get "announced" when added to your inventory aside from a little console log message in the top left.
+
+##What remains to be done
+
+Cloak fuel gauge isn't drawn and needs to be.
+Some manner of visible notification to players when killstreaks are rewarded
+UI element when hosting to toggle killstreaks (low priority, this is more about the code than the game design)
+Heavy weapon as a higher killstreak reward (ATST gun with less ammo)
+summonable AI buddy as a killstreak that can be given priority targets and possibly other basic instructions? good way to get involved with AI.
+Any additional unrelated features I come up with in the future, this won't necessarily just be killstreaks, I already want to add a satisfying parry system, for example.
+
+##What follows is the original OpenJK Readme
+
 # OpenJK
 
 OpenJK is an effort by the JACoders group to maintain and improve the game engines on which the Jedi Academy (JA) and Jedi Outcast (JO) games run on, while maintaining *full backwards compatibility* with the existing games. *This project does not attempt to rebalance or otherwise modify core gameplay*.
@@ -53,7 +78,7 @@ If you have the Mac App Store Version of Jedi Academy, follow these steps to get
 1. Install [Homebrew](http://brew.sh/) if you don't have it.
 2. Open the Terminal app, and enter the command `brew install sdl2`.
 3. Extract the contents of the OpenJK DMG ([Download the latest build](http://builds.openjk.org)) into the game directory `/Applications/Star Wars Jedi Knight: Jedi Academy.app/Contents/`
-4. Run `OpenJK.app` or `OpenJK SP.app` 
+4. Run `OpenJK.app` or `OpenJK SP.app`
 5. Savegames, Config Files and Log Files are stored in `/Users/<USER>/Library/Application Support/OpenJK/`
 
 

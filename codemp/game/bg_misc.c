@@ -977,6 +977,21 @@ Do not place. For siege classes ONLY.
 		"@MENUS_CLOAK_DESC"					// description
 	},
 
+	{
+		"item_cloak_ks",
+		"sound/weapons/w_pkup.wav",
+		{ "models/items/psgun.glm", //FIXME: no model
+		0, 0, 0} ,
+/* view */		NULL,
+/* icon */		"gfx/hud/i_icon_cloak",
+/* pickup *///	"Seeker Drone",
+		120,
+		IT_HOLDABLE,
+		HI_CLOAK_KS,
+/* precache */ "",
+/* sounds */ "",
+		"@MENUS_CLOAK_DESC"					// description
+	},
 /*QUAKED item_force_enlighten_light (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 Adds one rank to all Force powers temporarily. Only light jedi can use.
 */

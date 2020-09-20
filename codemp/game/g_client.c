@@ -3315,6 +3315,7 @@ void ClientSpawn(gentity_t *ent) {
 	//spawn with 100
 	client->ps.jetpackFuel = 100;
 	client->ps.cloakFuel = 100;
+	client->ps.cloakFuel_KS = 100;
 
 	client->pers = saved;
 	client->sess = savedSess;

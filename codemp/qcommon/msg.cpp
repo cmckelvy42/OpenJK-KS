@@ -1312,6 +1312,7 @@ netField_t	playerStateFields[] =
 { PSF(pm_flags), 16 },
 { PSF(jetpackFuel), 8 },
 { PSF(cloakFuel), 8 },
+{ PSF(cloakFuel_KS), 8 },
 { PSF(pm_time), -16 },
 { PSF(customRGBA[1]), 8 }, //0-255
 { PSF(clientNum), GENTITYNUM_BITS },
@@ -1471,6 +1472,7 @@ netField_t	pilotPlayerStateFields[] =
 { PSF(legsTimer), 16 },
 { PSF(jetpackFuel), 8 },
 { PSF(cloakFuel), 8 },
+{ PSF(cloakFuel_KS), 8 },
 { PSF(saberCanThrow), 1 },
 { PSF(fd.forcePowerDebounce[FP_LEVITATION]), 32 },
 { PSF(torsoFlip), 1 },

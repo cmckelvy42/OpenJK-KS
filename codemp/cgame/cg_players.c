@@ -4661,7 +4661,7 @@ static qboolean CG_PlayerShadow( centity_t *cent, float *shadowPlane ) {
 	}
 
 	// no shadows when cloaked
-	if ( cent->currentState.powerups & ( 1 << PW_CLOAKED ))
+	if ( (cent->currentState.powerups & ( 1 << PW_CLOAKED )) || (cent->currentState.powerups & (1 << PW_CLOAKED_KS)))
 	{
 		return qfalse;
 	}
@@ -10671,7 +10671,7 @@ stillDoSaber:
 		cent->miscTime = 0;
 	}
 
-	if (cent->currentState.powerups & (1 << PW_CLOAKED))
+	if ((cent->currentState.powerups & (1 << PW_CLOAKED)) || (cent->currentState.powerups & (1 << PW_CLOAKED_KS)))
 	{
 		if (!cent->cloaked)
 		{
@@ -10695,7 +10695,7 @@ stillDoSaber:
 		else
 		{
 			float perc = (float)(cent->uncloaking - cg.time) / 2000.0f;
-			if (( cent->currentState.powerups & ( 1 << PW_CLOAKED )))
+			if (( cent->currentState.powerups & ( 1 << PW_CLOAKED )) || (cent->currentState.powerups & (1 << PW_CLOAKED_KS)))
 			{//actually cloaking, so reverse it
 				perc = 1.0f - perc;
 			}
@@ -10718,7 +10718,7 @@ stillDoSaber:
 			}
 		}
 	}
-	else if (( cent->currentState.powerups & ( 1 << PW_CLOAKED )))
+	else if (( cent->currentState.powerups & ( 1 << PW_CLOAKED )) || (cent->currentState.powerups & (1 << PW_CLOAKED_KS)))
 	{//fully cloaked
 		if ((cg.snap->ps.fd.forcePowersActive & (1 << FP_SEE))
 			&& cg.snap->ps.clientNum != cent->currentState.number)
@@ -10776,7 +10776,7 @@ stillDoSaber:
 		}
 	}
 
-	if (!(cent->currentState.powerups & (1 << PW_CLOAKED)))
+	if (!(cent->currentState.powerups & (1 << PW_CLOAKED)) && !(cent->currentState.powerups & (1 << PW_CLOAKED_KS)))
 	{ //don't add the normal model if cloaked
 		CG_CheckThirdPersonAlpha( cent, &legs );
 		trap->R_AddRefEntityToScene(&legs);

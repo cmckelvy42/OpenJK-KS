@@ -33,6 +33,7 @@ extern void NPC_Jedi_PlayConfusionSound( gentity_t *self );
 extern void NPC_UseResponse( gentity_t *self, gentity_t *user, qboolean useWhenDone );
 //NEEDED FOR MIND-TRICK on NPCS=========================================================
 extern void Jedi_Decloak( gentity_t *self );
+extern void Jedi_Decloak_KS(gentity_t *self);
 
 extern qboolean BG_FullBodyTauntAnim( int anim );
 
@@ -1746,6 +1747,11 @@ void ForceLightningDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec
 					{//disable cloak temporarily
 						Jedi_Decloak( traceEnt );
 						traceEnt->client->cloakToggleTime = level.time + Q_irand( 3000, 10000 );
+					}
+					else if (traceEnt->client->ps.powerups[PW_CLOAKED_KS])
+					{//disable cloak temporarily
+						Jedi_Decloak_KS(traceEnt);
+						traceEnt->client->cloakToggleTime = level.time + Q_irand(3000, 10000);
 					}
 				}
 			}

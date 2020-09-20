@@ -1319,6 +1319,7 @@ typedef struct playerState_s {
 
 	//keeps track of cloak fuel
 	int			cloakFuel;
+	int			cloakFuel_KS;
 
 	//rww - spare values specifically for use by mod authors.
 	//See psf_overrides.txt if you want to increase the send

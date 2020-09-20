@@ -1273,6 +1273,8 @@ void ItemUse_Jetpack( gentity_t *ent )
 #define CLOAK_TOGGLE_TIME			1000
 extern void Jedi_Cloak( gentity_t *self );
 extern void Jedi_Decloak( gentity_t *self );
+extern void Jedi_Cloak_KS(gentity_t *self);
+extern void Jedi_Decloak_KS(gentity_t *self);
 void ItemUse_UseCloak( gentity_t *ent )
 {
 	assert(ent && ent->client);
@@ -1303,6 +1305,43 @@ void ItemUse_UseCloak( gentity_t *ent )
 	else
 	{//cloak
 		Jedi_Cloak( ent );
+	}
+
+	ent->client->cloakToggleTime = level.time + CLOAK_TOGGLE_TIME;
+}
+
+void ItemUse_UseCloak_KS(gentity_t *ent)
+{
+	assert(ent && ent->client);
+
+	if (ent->client->cloakToggleTime >= level.time)
+	{
+		return;
+	}
+
+	if (ent->health <= 0 ||
+		ent->client->ps.stats[STAT_HEALTH] <= 0 ||
+		(ent->client->ps.eFlags & EF_DEAD) ||
+		ent->client->ps.pm_type == PM_DEAD)
+	{ //can't use it when dead under any circumstances.
+		return;
+	}
+
+	if (!ent->client->ps.powerups[PW_CLOAKED_KS] &&
+		ent->client->ps.cloakFuel_KS < 5)
+	{ //too low on fuel to start it up, KS cloak doesn't recharge, so empty the fuel
+		ent->client->ps.stats[STAT_HOLDABLE_ITEMS] &= ~(1 << HI_CLOAK_KS);
+		ent->client->ps.cloakFuel_KS = 100;
+		return;
+	}
+
+	if (ent->client->ps.powerups[PW_CLOAKED_KS])
+	{//decloak
+		Jedi_Decloak_KS(ent);
+	}
+	else
+	{//cloak
+		Jedi_Cloak_KS(ent);
 	}
 
 	ent->client->cloakToggleTime = level.time + CLOAK_TOGGLE_TIME;
@@ -3278,3 +3317,21 @@ void G_RunItem( gentity_t *ent ) {
 	G_BounceItem( ent, &tr );
 }
 
+void G_GiveItem(gentity_t *ent, const char *name) {
+	gitem_t *it = BG_FindItem(name);
+	gentity_t *it_ent = G_Spawn();
+	trace_t trace;
+
+	VectorCopy(ent->r.currentOrigin, it_ent->s.origin);
+	it_ent->classname = it->classname;
+	G_SpawnItem(it_ent, it);
+	if (!it_ent || !it_ent->inuse)
+		return;
+	FinishSpawningItem(it_ent);
+	if (!it_ent || !it_ent->inuse)
+		return;
+	memset(&trace, 0, sizeof(trace));
+	Touch_Item(it_ent, ent, &trace);
+	if (it_ent->inuse)
+		G_FreeEntity(it_ent);
+}

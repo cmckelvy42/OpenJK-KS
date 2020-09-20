@@ -177,6 +177,7 @@ static vec3_t muzzle;
 extern qboolean G_BoxInBounds( vec3_t point, vec3_t mins, vec3_t maxs, vec3_t boundsMins, vec3_t boundsMaxs );
 extern qboolean G_HeavyMelee( gentity_t *attacker );
 extern void Jedi_Decloak( gentity_t *self );
+extern void Jedi_Decloak_KS(gentity_t *self);
 
 static void WP_FireEmplaced( gentity_t *ent, qboolean altFire );
 
@@ -1370,6 +1371,11 @@ void DEMP2_AltRadiusDamage( gentity_t *ent )
 					Jedi_Decloak( gent );
 					gent->client->cloakToggleTime = level.time + Q_irand( 3000, 10000 );
 				}
+				else if (gent->client->ps.powerups[PW_CLOAKED_KS])
+				{//disable cloak temporarily
+					Jedi_Decloak_KS(gent);
+					gent->client->cloakToggleTime = level.time + Q_irand(3000, 10000);
+				}
 			}
 		}
 	}
@@ -1756,7 +1762,8 @@ void rocketThink( gentity_t *ent )
 	if ( !ent->enemy
 		|| !ent->enemy->client
 		|| ent->enemy->health <= 0
-		|| ent->enemy->client->ps.powerups[PW_CLOAKED] )
+		|| ent->enemy->client->ps.powerups[PW_CLOAKED]
+		|| ent->enemy->client->ps.powerups[PW_CLOAKED_KS])
 	{//no enemy or enemy not a client or enemy dead or enemy cloaked
 		if ( !ent->genericValue1  )
 		{//doesn't have its own self-kill time

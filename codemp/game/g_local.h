@@ -1047,6 +1047,7 @@ void Jetpack_Off(gentity_t *ent);
 void Jetpack_On(gentity_t *ent);
 void ItemUse_Jetpack(gentity_t *ent);
 void ItemUse_UseCloak( gentity_t *ent );
+void ItemUse_UseCloak_KS(gentity_t *ent);
 void ItemUse_UseDisp(gentity_t *ent, int type);
 void ItemUse_UseEWeb(gentity_t *ent);
 void G_PrecacheDispensers(void);

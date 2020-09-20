@@ -800,6 +800,7 @@ void Boba_FireDecide( void )
 		}
 	}
 }
+void Jedi_Decloak_KS(gentity_t *self);
 
 void Jedi_Cloak( gentity_t *self )
 {
@@ -810,6 +811,7 @@ void Jedi_Cloak( gentity_t *self )
 		{
 			if ( !self->client->ps.powerups[PW_CLOAKED] )
 			{//cloak
+				Jedi_Decloak_KS(self);
 				self->client->ps.powerups[PW_CLOAKED] = Q3_INFINITE;
 
 				//FIXME: debounce attacks?
@@ -832,6 +834,43 @@ void Jedi_Decloak( gentity_t *self )
 				self->client->ps.powerups[PW_CLOAKED] = 0;
 
 				G_Sound( self, CHAN_ITEM, G_SoundIndex("sound/chars/shadowtrooper/decloak.wav") );
+			}
+		}
+	}
+}
+
+void Jedi_Cloak_KS(gentity_t *self)
+{
+	if (self)
+	{
+		self->flags |= FL_NOTARGET;
+		if (self->client)
+		{
+			if (!self->client->ps.powerups[PW_CLOAKED_KS])
+			{//cloak
+				Jedi_Decloak(self);
+				self->client->ps.powerups[PW_CLOAKED_KS] = Q3_INFINITE;
+
+				//FIXME: debounce attacks?
+				//FIXME: temp sound
+				G_Sound(self, CHAN_ITEM, G_SoundIndex("sound/chars/shadowtrooper/cloak.wav"));
+			}
+		}
+	}
+}
+
+void Jedi_Decloak_KS(gentity_t *self)
+{
+	if (self)
+	{
+		self->flags &= ~FL_NOTARGET;
+		if (self->client)
+		{
+			if (self->client->ps.powerups[PW_CLOAKED_KS])
+			{//Uncloak
+				self->client->ps.powerups[PW_CLOAKED_KS] = 0;
+
+				G_Sound(self, CHAN_ITEM, G_SoundIndex("sound/chars/shadowtrooper/decloak.wav"));
 			}
 		}
 	}

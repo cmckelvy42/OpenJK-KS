@@ -27,6 +27,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 extern void Jedi_Cloak( gentity_t *self );
 extern void Jedi_Decloak( gentity_t *self );
+extern void Jedi_Cloak_KS(gentity_t *self);
+extern void Jedi_Decloak_KS(gentity_t *self);
 
 qboolean PM_SaberInTransition( int move );
 qboolean PM_SaberInStart( int move );
@@ -1071,6 +1073,9 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			break;
 		case EV_USE_ITEM11: //cloak
 			ItemUse_UseCloak(ent);
+			break;
+		case EV_USE_ITEM12: //cloak
+			ItemUse_UseCloak_KS(ent);
 			break;
 		default:
 			break;
@@ -3292,7 +3297,7 @@ void ClientThink_real( gentity_t *ent ) {
 			break;
 		case GENCMD_USE_CLOAK:
 			if ( (ent->client->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << HI_CLOAK)) &&
-				G_ItemUsable(&ent->client->ps, HI_CLOAK) )
+				G_ItemUsable(&ent->client->ps, HI_CLOAK))
 			{
 				if ( ent->client->ps.powerups[PW_CLOAKED] )
 				{//decloak
@@ -3301,6 +3306,18 @@ void ClientThink_real( gentity_t *ent ) {
 				else
 				{//cloak
 					Jedi_Cloak( ent );
+				}
+			}
+			else if ((ent->client->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << HI_CLOAK_KS)) &&
+				G_ItemUsable(&ent->client->ps, HI_CLOAK_KS))
+			{
+				if (ent->client->ps.powerups[PW_CLOAKED_KS])
+				{//decloak
+					Jedi_Decloak(ent);
+				}
+				else
+				{//cloak
+					Jedi_Cloak(ent);
 				}
 			}
 			break;

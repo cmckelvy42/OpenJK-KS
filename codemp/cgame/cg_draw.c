@@ -4958,7 +4958,7 @@ static void CG_DrawCrosshair( vec3_t worldPoint, int chEntValid ) {
 		{
 			crossEnt = &cg_entities[cg.crosshairClientNum];
 
-			if ( crossEnt->currentState.powerups & (1 <<PW_CLOAKED) )
+			if ( (crossEnt->currentState.powerups & (1 <<PW_CLOAKED)) || (crossEnt->currentState.powerups & (1 << PW_CLOAKED_KS)))
 			{ //don't show up for cloaked guys
 				ecolor[0] = 1.0;//R
 				ecolor[1] = 1.0;//G
@@ -5031,7 +5031,7 @@ static void CG_DrawCrosshair( vec3_t worldPoint, int chEntValid ) {
 						plTeam = NPCTEAM_PLAYER;
 					}
 
-					if ( crossEnt->currentState.powerups & (1 <<PW_CLOAKED) )
+					if ( (crossEnt->currentState.powerups & (1 <<PW_CLOAKED)) || (crossEnt->currentState.powerups & (1 << PW_CLOAKED_KS)))
 					{
 						ecolor[0] = 1.0f;//R
 						ecolor[1] = 1.0f;//G
@@ -6333,7 +6333,7 @@ static void CG_DrawCrosshairNames( void ) {
 		return;
 	}
 
-	if (cg_entities[cg.crosshairClientNum].currentState.powerups & (1 << PW_CLOAKED))
+	if ((cg_entities[cg.crosshairClientNum].currentState.powerups & (1 << PW_CLOAKED)) || (cg_entities[cg.crosshairClientNum].currentState.powerups & (1 << PW_CLOAKED_KS)))
 	{
 		return;
 	}
@@ -7069,6 +7069,10 @@ void CG_DrawEWebHealth(void)
 	if (cg.snap->ps.cloakFuel < 100)
 	{
 		x -= (JPFUELBAR_W+8.0f);
+	}
+	if (cg.snap->ps.cloakFuel_KS < 100)
+	{
+		x -= (JPFUELBAR_W + 8.0f);
 	}
 
 	//color of the bar

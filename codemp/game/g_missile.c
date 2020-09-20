@@ -29,6 +29,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 extern void laserTrapStick( gentity_t *ent, vec3_t endpos, vec3_t normal );
 extern void Jedi_Decloak( gentity_t *self );
+extern void Jedi_Decloak_KS(gentity_t *self);
 
 extern qboolean FighterIsLanded( Vehicle_t *pVeh, playerState_t *parentPS );
 
@@ -758,6 +759,19 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 				else
 				{//temp disable
 					other->client->cloakToggleTime = level.time + Q_irand( 3000, 10000 );
+				}
+			}
+			else if (other && other->client && other->client->ps.powerups[PW_CLOAKED_KS])
+			{
+				Jedi_Decloak_KS(other);
+				if (ent->methodOfDeath == MOD_DEMP2_ALT)
+				{//direct hit with alt disables cloak forever
+					//permanently disable the saboteur's cloak
+					other->client->cloakToggleTime = Q3_INFINITE;
+				}
+				else
+				{//temp disable
+					other->client->cloakToggleTime = level.time + Q_irand(3000, 10000);
 				}
 			}
 		}

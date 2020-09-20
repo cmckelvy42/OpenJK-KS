@@ -5954,7 +5954,7 @@ void PM_RocketLock( float lockDist, qboolean vehicleLock )
 	if (tr.fraction != 1 && tr.entityNum < ENTITYNUM_NONE && tr.entityNum != pm->ps->clientNum)
 	{
 		bgEntity_t *bgEnt = PM_BGEntForNum(tr.entityNum);
-		if ( bgEnt && (bgEnt->s.powerups&PW_CLOAKED) )
+		if ( bgEnt && ((bgEnt->s.powerups&PW_CLOAKED) || (bgEnt->s.powerups&PW_CLOAKED_KS)))
 		{
 			pm->ps->rocketLockIndex = ENTITYNUM_NONE;
 			pm->ps->rocketLockTime = 0;
@@ -6391,6 +6391,8 @@ int PM_ItemUsable(playerState_t *ps, int forcedUse)
 	case HI_EWEB:
 		return 1;
 	case HI_CLOAK: //check for stuff here?
+		return 1;
+	case HI_CLOAK_KS:
 		return 1;
 	default:
 		return 1;
@@ -7096,6 +7098,7 @@ static void PM_Weapon( void )
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_HEALTHDISP &&
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_AMMODISP &&
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_CLOAK &&
+						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_CLOAK_KS &&
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB)
 					{ //never use up the binoculars or jetpack or dispensers or cloak or ...
 						pm->ps->stats[STAT_HOLDABLE_ITEMS] -= (1 << bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag);
@@ -7114,6 +7117,7 @@ static void PM_Weapon( void )
 					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_HEALTHDISP &&
 					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_AMMODISP &&
 					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_CLOAK &&
+					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_CLOAK_KS &&
 					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB)
 				{
 					pm->ps->stats[STAT_HOLDABLE_ITEM] = 0;

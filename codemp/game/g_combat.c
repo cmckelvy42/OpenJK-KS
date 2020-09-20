@@ -32,6 +32,7 @@ extern void G_VehicleSetDamageLocFlags( gentity_t *veh, int impactDir, int death
 extern void G_VehUpdateShields( gentity_t *targ );
 extern void G_LetGoOfWall( gentity_t *ent );
 extern void BG_ClearRocketLock( playerState_t *ps );
+extern void G_GiveItem(gentity_t *ent, const char *name);
 //rww - pd
 void BotDamageNotification(gclient_t *bot, gentity_t *attacker);
 //end rww
@@ -2506,6 +2507,29 @@ extern void RunEmplacedWeapon( gentity_t *ent, usercmd_t **ucmd );
 	if (attacker && attacker->client && attacker->inuse)
 	{
 		G_LogWeaponFrag(killer, self->s.number);
+		if (g_enableKillstreaks.value && (level.gametype != GT_SIEGE && level.gametype != GT_DUEL && level.gametype != GT_POWERDUEL) )
+		{
+			
+			attacker->client->ps.stats[STAT_KILLSTREAK]++;
+			if (attacker->client->ps.stats[STAT_KILLSTREAK] == 3)
+			{
+				//attacker->client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SEEKER);
+				G_GiveItem(attacker, "item_seeker");
+				trap->SendServerCommand(attacker-g_entities, "print \"Obtained Seeker droid!\n\"");
+				G_Sound(attacker, CHAN_AUTO, G_SoundIndex("sound/chars/effects/cloth1.mp3"));
+			}
+			else if (attacker->client->ps.stats[STAT_KILLSTREAK] == 5)
+			{
+				G_GiveItem(attacker, "item_sentry_gun");
+				trap->SendServerCommand(attacker - g_entities, "print \"Obtained Sentry Gun!\n\"");
+			}
+			else if (attacker->client->ps.stats[STAT_KILLSTREAK] == 7)
+			{
+				G_GiveItem(attacker, "item_cloak_KS");
+				trap->SendServerCommand(attacker - g_entities, "print \"Obtained Cloak!\n\"");
+				attacker->client->ps.stats[STAT_KILLSTREAK] = 0;
+			}
+		}
 	}
 
 	// broadcast the death event to everyone
@@ -2761,6 +2785,7 @@ extern void RunEmplacedWeapon( gentity_t *ent, usercmd_t **ucmd );
 
 	self->client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
 	self->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+	self->client->ps.stats[STAT_KILLSTREAK] = 0;
 
 	// NOTENOTE No gib deaths right now, this is star wars.
 	/*

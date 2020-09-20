@@ -229,7 +229,7 @@ typedef enum {
 } gametype_t;
 
 // gametype bits
-#define GTB_NONE			0x000 // invalid
+#define GTB_NONE				0x000 // invalid
 #define GTB_FFA				0x001 // free for all
 #define GTB_HOLOCRON		0x002 // holocron ffa
 #define GTB_JEDIMASTER		0x004 // jedi master
@@ -574,7 +574,8 @@ typedef enum {
 	STAT_ARMOR,
 	STAT_DEAD_YAW,					// look this direction when dead (FIXME: get rid of?)
 	STAT_CLIENTS_READY,				// bit mask of clients wishing to exit the intermission (FIXME: configstring?)
-	STAT_MAX_HEALTH					// health / armor limit, changable by handicap
+	STAT_MAX_HEALTH,					// health / armor limit, changable by handicap
+	STAT_KILLSTREAK
 } statIndex_t;
 
 
@@ -715,6 +716,7 @@ typedef enum {
 	PW_DISINT_4,
 	PW_SPEED,
 	PW_CLOAKED,
+	PW_CLOAKED_KS,
 	PW_FORCE_ENLIGHTENED_LIGHT,
 	PW_FORCE_ENLIGHTENED_DARK,
 	PW_FORCE_BOON,
@@ -739,6 +741,7 @@ typedef enum {
 	HI_AMMODISP,
 	HI_EWEB,
 	HI_CLOAK,
+	HI_CLOAK_KS,
 
 	HI_NUM_HOLDABLE
 } holdable_t;
