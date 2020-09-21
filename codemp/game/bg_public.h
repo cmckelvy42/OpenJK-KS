@@ -905,6 +905,8 @@ typedef enum {
 	EV_MISSILE_MISS_METAL,
 	EV_BULLET,				// otherEntity is the shooter
 
+	EV_KILLSTREAK,
+
 	EV_PAIN,
 	EV_DEATH1,
 	EV_DEATH2,

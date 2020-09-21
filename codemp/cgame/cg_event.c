@@ -325,7 +325,7 @@ clientkilled:
 			s = va("%s %s", sKilledStr, targetName );
 		}
 		//if (!(cg_singlePlayerActive.integer && cg_cameraOrbit.integer)) {
-			CG_CenterPrint( s, SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
+			CG_CenterPrint(s, SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
 		//}
 		// print the text message as well
 	}
@@ -3332,6 +3332,21 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		}
 		break;
 
+	case EV_KILLSTREAK:
+		DEBUGNAME("EV_KILLSTREAK");
+		trap->S_StartSound(NULL, es->number, CHAN_ITEM, trap->S_RegisterSound(bg_itemlist[es->eventParm].pickup_sound));
+		CG_ItemPickup(es->eventParm);
+		char str[1024];
+		char text[1024];
+		char upperKey[1024];
+		Q_strncpyz(str, "Nice Killstreak!\n You got a ", sizeof(str));
+		strcpy(upperKey, bg_itemlist[es->eventParm].classname);
+		if (trap->SE_GetStringTextString(va("SP_INGAME_%s", Q_strupr(upperKey)), text, sizeof(text)))
+			strcat(str, text);
+		else
+			strcat(str, bg_itemlist[es->eventParm].classname);
+		CG_CenterPrint(str, SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH);
+		break;
 
 	case EV_OBITUARY:
 		DEBUGNAME("EV_OBITUARY");

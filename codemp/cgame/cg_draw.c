@@ -4446,7 +4446,13 @@ void CG_CenterPrint( const char *str, int y, int charWidth ) {
 	int		i = 0;
 	//[/BugFix19]
 
-	Q_strncpyz( cg.centerPrint, str, sizeof(cg.centerPrint) );
+	if (cg.centerPrintTime + 50 >= cg.time && !strstr(cg.centerPrint, str)) //concat messages within small window of each other
+	{
+		Q_strcat(cg.centerPrint, sizeof(cg.centerPrint), "\n");
+		Q_strcat(cg.centerPrint, sizeof(cg.centerPrint), str);
+	}
+	else
+		Q_strncpyz( cg.centerPrint, str, sizeof(cg.centerPrint) );
 
 	cg.centerPrintTime = cg.time;
 	cg.centerPrintY = y;

@@ -32,7 +32,6 @@ extern void G_VehicleSetDamageLocFlags( gentity_t *veh, int impactDir, int death
 extern void G_VehUpdateShields( gentity_t *targ );
 extern void G_LetGoOfWall( gentity_t *ent );
 extern void BG_ClearRocketLock( playerState_t *ps );
-extern void G_GiveItem(gentity_t *ent, const char *name);
 //rww - pd
 void BotDamageNotification(gclient_t *bot, gentity_t *attacker);
 //end rww
@@ -2504,6 +2503,18 @@ extern void RunEmplacedWeapon( gentity_t *ent, usercmd_t **ucmd );
 
 	G_LogWeaponKill(killer, meansOfDeath);
 	G_LogWeaponDeath(self->s.number, self->s.weapon);
+
+	// broadcast the death event to everyone
+	if (self->s.eType != ET_NPC && !g_noPDuelCheck)
+	{
+		ent = G_TempEntity(self->r.currentOrigin, EV_OBITUARY);
+		ent->s.eventParm = meansOfDeath;
+		ent->s.otherEntityNum = self->s.number;
+		ent->s.otherEntityNum2 = killer;
+		ent->r.svFlags = SVF_BROADCAST;	// send to everyone
+		ent->s.isJediMaster = wasJediMaster;
+	}
+
 	if (attacker && attacker->client && attacker->inuse)
 	{
 		G_LogWeaponFrag(killer, self->s.number);
@@ -2513,34 +2524,21 @@ extern void RunEmplacedWeapon( gentity_t *ent, usercmd_t **ucmd );
 			attacker->client->ps.stats[STAT_KILLSTREAK]++;
 			if (attacker->client->ps.stats[STAT_KILLSTREAK] == 3)
 			{
-				//attacker->client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SEEKER);
-				G_GiveItem(attacker, "item_seeker");
-				trap->SendServerCommand(attacker-g_entities, "print \"Obtained Seeker droid!\n\"");
-				G_Sound(attacker, CHAN_AUTO, G_SoundIndex("sound/chars/effects/cloth1.mp3"));
+				attacker->client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SEEKER);
+				G_AddEvent(attacker, EV_KILLSTREAK, BG_FindItemForHoldable(HI_SEEKER) - bg_itemlist); //give the bg_itemlist index
 			}
 			else if (attacker->client->ps.stats[STAT_KILLSTREAK] == 5)
 			{
-				G_GiveItem(attacker, "item_sentry_gun");
-				trap->SendServerCommand(attacker - g_entities, "print \"Obtained Sentry Gun!\n\"");
+				attacker->client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SENTRY_GUN);
+				G_AddEvent(attacker, EV_KILLSTREAK, BG_FindItemForHoldable(HI_SENTRY_GUN) - bg_itemlist);
 			}
 			else if (attacker->client->ps.stats[STAT_KILLSTREAK] == 7)
 			{
-				G_GiveItem(attacker, "item_cloak_KS");
-				trap->SendServerCommand(attacker - g_entities, "print \"Obtained Cloak!\n\"");
+				attacker->client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_CLOAK_KS);
 				attacker->client->ps.stats[STAT_KILLSTREAK] = 0;
+				G_AddEvent(attacker, EV_KILLSTREAK, BG_FindItemForHoldable(HI_CLOAK_KS) - bg_itemlist);
 			}
 		}
-	}
-
-	// broadcast the death event to everyone
-	if (self->s.eType != ET_NPC && !g_noPDuelCheck)
-	{
-		ent = G_TempEntity( self->r.currentOrigin, EV_OBITUARY );
-		ent->s.eventParm = meansOfDeath;
-		ent->s.otherEntityNum = self->s.number;
-		ent->s.otherEntityNum2 = killer;
-		ent->r.svFlags = SVF_BROADCAST;	// send to everyone
-		ent->s.isJediMaster = wasJediMaster;
 	}
 
 	self->enemy = attacker;

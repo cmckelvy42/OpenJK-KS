@@ -990,7 +990,7 @@ Do not place. For siege classes ONLY.
 		HI_CLOAK_KS,
 /* precache */ "",
 /* sounds */ "",
-		"@MENUS_CLOAK_DESC"					// description
+		"Cloak"					// description
 	},
 /*QUAKED item_force_enlighten_light (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 Adds one rank to all Force powers temporarily. Only light jedi can use.

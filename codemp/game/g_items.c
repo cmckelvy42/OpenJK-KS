@@ -3316,22 +3316,3 @@ void G_RunItem( gentity_t *ent ) {
 
 	G_BounceItem( ent, &tr );
 }
-
-void G_GiveItem(gentity_t *ent, const char *name) {
-	gitem_t *it = BG_FindItem(name);
-	gentity_t *it_ent = G_Spawn();
-	trace_t trace;
-
-	VectorCopy(ent->r.currentOrigin, it_ent->s.origin);
-	it_ent->classname = it->classname;
-	G_SpawnItem(it_ent, it);
-	if (!it_ent || !it_ent->inuse)
-		return;
-	FinishSpawningItem(it_ent);
-	if (!it_ent || !it_ent->inuse)
-		return;
-	memset(&trace, 0, sizeof(trace));
-	Touch_Item(it_ent, ent, &trace);
-	if (it_ent->inuse)
-		G_FreeEntity(it_ent);
-}
